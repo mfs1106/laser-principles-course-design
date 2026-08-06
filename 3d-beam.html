@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>三维高斯光束可视化实验 - 激光原理虚拟仿真实验平台</title>
+  <link rel="stylesheet" href="3d-beam.css">
+</head>
+<body>
+  <header class="page-header">
+    <h1>🎯 三维高斯光束可视化实验</h1>
+    <button class="back-btn" onclick="goBack()">← 返回首页</button>
+  </header>
+
+  <div class="main-container">
+    <!-- 左侧参数控制区 -->
+    <aside class="control-panel">
+      <h2>参数设置</h2>
+
+      <div class="input-group">
+        <label>波长 λ (nm)</label>
+        <input type="number" id="wavelength" value="632.8" min="100" max="2000" step="0.1">
+      </div>
+
+      <div class="input-group">
+        <label>束腰 w₀ (mm)</label>
+        <input type="number" id="waist" value="0.5" min="0.01" max="5" step="0.01">
+      </div>
+
+      <div class="input-group">
+        <label>传播距离 z (m)</label>
+        <input type="number" id="distance" value="3" min="0" max="10" step="0.1">
+      </div>
+
+      <div class="input-group">
+        <label>视觉缩放系数</label>
+        <input type="range" id="visualScale" value="1" min="0.1" max="3" step="0.1">
+        <span class="scale-value">1.0x</span>
+      </div>
+
+      <div class="button-group">
+        <button id="resetBtn" onclick="resetParameters()">↺ 重置参数</button>
+        <button id="autoRotateBtn" onclick="toggleAutoRotate()">🔄 自动旋转</button>
+      </div>
+
+      <div class="data-section">
+        <h3>实时数据</h3>
+        <div class="data-item">
+          <span class="data-label">瑞利长度 zR</span>
+          <span class="data-value" id="zRValue">-- m</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">发散角 θ</span>
+          <span class="data-value" id="thetaValue">-- mrad</span>
+        </div>
+        <div class="data-item">
+        <span class="data-label">当前光束半径</span>
+        <span class="data-value" id="beamRadiusValue">-- mm</span>
+      </div>
+
+      <div class="bloom-section">
+        <h3>激光发光效果</h3>
+        <div class="input-group">
+          <label>发光强度</label>
+          <input type="range" id="bloomStrength" value="1.5" min="0" max="5" step="0.1">
+          <span class="range-value">1.5</span>
+        </div>
+        <div class="input-group">
+          <label>发光半径</label>
+          <input type="range" id="bloomRadius" value="0.8" min="0" max="2" step="0.1">
+          <span class="range-value">0.8</span>
+        </div>
+        <div class="button-group">
+          <button id="bloomToggle" onclick="toggleGlow()">💡 开关发光</button>
+        </div>
+      </div>
+
+      <div class="particle-section">
+        <h3>激光粒子流</h3>
+        <div class="input-group">
+          <label>粒子速度</label>
+          <input type="range" id="particleSpeed" value="1.0" min="0.1" max="3" step="0.1">
+          <span class="particle-speed-value">1.0x</span>
+        </div>
+        <div class="button-group">
+          <button id="particleToggle" onclick="toggleParticles()">✨ 关闭粒子</button>
+        </div>
+      </div>
+
+      <div class="energy-cloud-section">
+        <h3>高斯光束能量云</h3>
+        <div class="button-group">
+          <button id="energyCloudToggle" onclick="toggleEnergyCloud()">☁️ 关闭能量云</button>
+        </div>
+      </div>
+
+      <div class="tem-mode-section">
+        <h3>TEM00 模式观察</h3>
+        <div class="input-group">
+          <label>观察位置 z (m)</label>
+          <input type="range" id="temObserveZ" value="0" min="0" max="3" step="0.01">
+          <span class="tem-z-value">0.00 m</span>
+        </div>
+        <div class="tem-info">
+          <div class="tem-info-item">
+            <span class="tem-label">模式:</span>
+            <span class="tem-value" id="temModeName">TEM00</span>
+          </div>
+          <div class="tem-info-item">
+            <span class="tem-label">光束半径:</span>
+            <span class="tem-value" id="temBeamRadius">-- mm</span>
+          </div>
+        </div>
+        <div class="button-group">
+          <button id="temToggle" onclick="toggleTEMMode()">📊 开启模式</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 右侧三维显示区域 -->
+    <main class="canvas-container">
+      <div id="scene-container"></div>
+      <div class="scene-info">
+        <div class="info-item">🖱️ 左键拖动：旋转视角</div>
+        <div class="info-item">🖱️ 滚轮：缩放</div>
+        <div class="info-item">🖱️ 右键拖动：平移</div>
+      </div>
+    </main>
+
+    <!-- TEM00模式展示区域 -->
+    <aside class="tem-panel" id="temPanel" style="display: none;">
+      <h2>TEM00 模式分析</h2>
+      
+      <div class="tem-heatmap-section">
+        <h3>二维光强分布</h3>
+        <canvas id="heatmapCanvas" width="200" height="200"></canvas>
+      </div>
+      
+      <div class="tem-curve-section">
+        <h3>横截面光强曲线</h3>
+        <canvas id="curveCanvas" width="200" height="120"></canvas>
+      </div>
+      
+      <div class="tem-3d-section">
+        <h3>三维光强分布</h3>
+        <div id="tem3dContainer"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="3d-beam.js"></script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+/* 高斯光束动态传播实验 - 样式文件 */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Microsoft YaHei', Arial, sans-serif;
+  background: #f5f6f8;
+  color: #2c3e50;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* 页面头部 */
+.page-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 15px 25px;
+  background: rgba(255, 255, 255, 0.98);
+  border-bottom: 1px solid #e0e4e8;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-header h1 {
+  font-size: 20px;
+  color: #3a9e96;
+  font-weight: 600;
+}
+
+.back-btn {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #42d7c8, #2db8ab);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.back-btn:hover {
+  transform: scale(1.05);
+}
+
+/* 主容器 */
+.main-container {
+  display: flex;
+  padding-top: 70px;
+  min-height: 100vh;
+  gap: 15px;
+  padding: 70px 15px 15px;
+}
+
+/* 左侧控制面板 */
+.control-panel {
+  width: 220px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #dde1e6;
+  padding: 15px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+}
+
+.control-panel h2 {
+  color: #3a9e96;
+  font-size: 16px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e8eaed;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.input-group input[type="number"] {
+  width: 100%;
+  padding: 8px 10px;
+  background: #f8f9fa;
+  border: 1px solid #d0d5dd;
+  border-radius: 4px;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+.input-group input[type="range"] {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  background: #dde1e6;
+  border-radius: 3px;
+  outline: none;
+}
+
+.input-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, #42d7c8, #2db8ab);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.button-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.button-group button {
+  flex: 1;
+  padding: 10px 5px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#startBtn {
+  background: linear-gradient(135deg, #42d7c8, #2db8ab);
+  color: #fff;
+  font-weight: bold;
+}
+
+#startBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(66, 215, 200, 0.3);
+}
+
+#pauseBtn {
+  background: linear-gradient(135deg, #ffa502, #ff6b6b);
+  color: #fff;
+  font-weight: bold;
+}
+
+#pauseBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+#resetBtn {
+  background: #eef7f6;
+  color: #3a9e96;
+  border: 1px solid #42d7c8;
+}
+
+#resetBtn:hover {
+  background: #d8f0ed;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 公式区域 */
+.formula-section {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e8eaed;
+}
+
+.formula-section h3 {
+  color: #3a9e96;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.formula {
+  background: #f8f9fa;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #2c3e50;
+  border-left: 3px solid #42d7c8;
+}
+
+/* 中间动画区域 */
+.animation-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.canvas-container {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #dde1e6;
+  position: relative;
+  min-height: 350px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+}
+
+#propagationCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.canvas-label {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #999;
+  font-size: 12px;
+}
+
+.cross-section-preview {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #dde1e6;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+}
+
+.cross-section-preview h3 {
+  color: #3a9e96;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+#crossSectionCanvas {
+  background: #fafbfc;
+  border-radius: 50%;
+  border: 2px solid rgba(66, 215, 200, 0.3);
+}
+
+.section-label {
+  font-size: 11px;
+  color: #888;
+  margin-top: 8px;
+}
+
+.intensity-section {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #dde1e6;
+  padding: 10px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+}
+
+.intensity-section h3 {
+  color: #3a9e96;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+#intensityCanvas {
+  width: 100%;
+  height: 150px;
+  background: #fafbfc;
+  border-radius: 4px;
+}
+
+/* 右侧数据面板 */
+.data-panel {
+  width: 200px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #dde1e6;
+  padding: 15px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+}
+
+.data-panel h2 {
+  color: #3a9e96;
+  font-size: 16px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e8eaed;
+}
+
+.data-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e8eaed;
+}
+
+.data-label {
+  font-size: 12px;
+  color: #555;
+}
+
+.data-value {
+  font-size: 14px;
+  color: #3a9e96;
+  font-weight: bold;
+}
+
+.data-item.highlight {
+  background: rgba(66, 215, 200, 0.06);
+  margin: 5px -10px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.data-item.highlight .data-value {
+  color: #e67e22;
+}
+
+.legend-section {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e8eaed;
+}
+
+.legend-section h3 {
+  color: #3a9e96;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  color: #555;
+}
+
+.legend-color {
+  width: 16px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.legend-color.blue {
+  background: #42d7c8;
+}
+
+.legend-color.red {
+  background: #ff6b6b;
+}
+
+.legend-color.gold {
+  background: #ffd700;
+}
+
+.legend-color.orange {
+  background: #ffa502;
+}
+
+/* 响应式布局 */
+@media (max-width: 1200px) {
+  .main-container {
+    flex-wrap: wrap;
+  }
+
+  .control-panel,
+  .data-panel {
+    width: 45%;
+  }
+
+  .animation-area {
+    width: 100%;
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .control-panel,
+  .data-panel {
+    width: 100%;
+  }
+
+  .page-header h1 {
+    font-size: 16px;
+  }
+}

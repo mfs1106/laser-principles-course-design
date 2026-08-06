@@ -1,0 +1,290 @@
+/* ========== 全局样式 ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  background: #f5f6f8;
+  color: #2c3e50;
+  min-height: 100vh;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  padding-top: 60px;
+}
+
+/* ========== 导航栏 ========== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e4e8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 1000;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-brand h1 {
+  font-size: 18px;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.navbar-brand .course-label {
+  font-size: 12px;
+  color: #3a9e96;
+  font-weight: 600;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  padding: 8px 16px;
+  background: #f8f9fa;
+  border: 1px solid #dde1e6;
+  border-radius: 6px;
+  color: #555;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  background: #eef7f6;
+  border-color: #42d7c8;
+  color: #3a9e96;
+}
+
+.nav-link.active {
+  background: linear-gradient(135deg, #42d7c8, #2db8ab);
+  border-color: transparent;
+  color: #fff;
+}
+
+/* ========== 通用面板样式 ========== */
+.panel {
+  background: #ffffff;
+  border: 1px solid #dde1e6;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+}
+
+.panel h2 {
+  color: #3a9e96;
+  font-size: 18px;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e8eaed;
+}
+
+/* ========== 通用输入样式 ========== */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.input-group label {
+  font-size: 13px;
+  color: #555;
+  font-weight: 600;
+}
+
+.input-group input[type="number"] {
+  width: 100%;
+  padding: 10px 12px;
+  background: #f8f9fa;
+  border: 1px solid #d0d5dd;
+  border-radius: 6px;
+  color: #2c3e50;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-group input[type="number"]:focus {
+  border-color: #42d7c8;
+}
+
+.input-group input[type="range"] {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  background: #dde1e6;
+  border-radius: 3px;
+  outline: none;
+}
+
+.input-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, #42d7c8, #2db8ab);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* ========== 按钮样式 ========== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #42d7c8, #2db8ab);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #eef7f6;
+  color: #3a9e96;
+  border: 1px solid rgba(66,215,200,0.3);
+}
+
+.btn-secondary:hover {
+  background: #d8f0ed;
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #ffa502, #e67e22);
+  color: #fff;
+}
+
+.btn-danger {
+  background: rgba(231,76,60,0.08);
+  color: #e74c3c;
+  border: 1px solid rgba(231,76,60,0.2);
+}
+
+.btn-danger:hover {
+  background: rgba(231,76,60,0.15);
+}
+
+/* ========== 结果展示 ========== */
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background: #f8f9fa;
+  border: 1px solid #dde1e6;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.result-item span {
+  color: #555;
+  font-size: 13px;
+}
+
+.result-item strong {
+  color: #2c3e50;
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+}
+
+/* ========== 页面头部 ========== */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.page-header h1 {
+  font-size: 20px;
+  color: #3a9e96;
+}
+
+/* ========== 公式区域 ========== */
+.formula-section {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #e8eaed;
+}
+
+.formula-section h3 {
+  color: #3a9e96;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.formula-item {
+  background: #f8f9fa;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  border-left: 3px solid #42d7c8;
+  font-size: 14px;
+  text-align: center;
+}
+
+.formula-item .katex {
+  font-size: 1.1em;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 860px) {
+  .navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 12px;
+    gap: 8px;
+  }
+  .app-main {
+    padding-top: 110px;
+  }
+  .navbar-links {
+    justify-content: center;
+  }
+}

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教学实验模式 - 激光原理课程设计</title>
+  <link rel="stylesheet" href="experiment.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="page-header">
+    <h1>🔬 教学实验模式</h1>
+    <div class="header-buttons">
+      <button class="download-btn" onclick="window.location.href='dataCenter.html'">📊 数据中心</button>
+      <button class="download-btn" onclick="downloadExperimentGuide()">📥 下载实验指导书</button>
+      <button class="back-btn" onclick="goBack()">← 返回首页</button>
+    </div>
+  </header>
+
+  <div class="experiment-container">
+    <div class="experiment-list">
+      <h2>选择实验</h2>
+      <div class="experiment-item" data-exp="1" onclick="selectExperiment(1)">
+        <div class="exp-number">1</div>
+        <div class="exp-content">
+          <h3>波长对发散角的影响</h3>
+          <p>观察不同波长激光束的发散角变化</p>
+        </div>
+        <div class="exp-status" id="exp1-status"></div>
+      </div>
+      <div class="experiment-item" data-exp="2" onclick="selectExperiment(2)">
+        <div class="exp-number">2</div>
+        <div class="exp-content">
+          <h3>束腰对瑞利长度的影响</h3>
+          <p>观察不同束腰大小对瑞利长度的影响</p>
+        </div>
+        <div class="exp-status" id="exp2-status"></div>
+      </div>
+      <div class="experiment-item" data-exp="3" onclick="selectExperiment(3)">
+        <div class="exp-number">3</div>
+        <div class="exp-content">
+          <h3>传播距离对光束扩散的影响</h3>
+          <p>观察光束随传播距离的扩散变化</p>
+        </div>
+        <div class="exp-status" id="exp3-status"></div>
+      </div>
+
+      <div class="guide-section">
+        <h3>📋 实验指导书</h3>
+        <p>包含完整的实验原理、步骤、数据记录表格和思考题</p>
+        <button class="guide-download-btn" onclick="downloadExperimentGuide()">
+          📥 下载 Word 文档
+        </button>
+      </div>
+    </div>
+
+    <div class="experiment-display">
+      <div class="display-header">
+        <h2 id="currentExpTitle">请选择一个实验</h2>
+        <div class="progress-indicator">
+          <span id="stepIndicator">步骤 0/0</span>
+        </div>
+      </div>
+
+      <div class="chart-area">
+        <div id="expChart" class="main-chart"></div>
+        <div class="params-display">
+          <div class="param-item">
+            <span class="param-label">波长 λ</span>
+            <span class="param-value" id="displayLambda">--</span>
+          </div>
+          <div class="param-item">
+            <span class="param-label">束腰 w₀</span>
+            <span class="param-value" id="displayWaist">--</span>
+          </div>
+          <div class="param-item">
+            <span class="param-label">传播距离 z</span>
+            <span class="param-value" id="displayZ">--</span>
+          </div>
+          <div class="param-item highlight">
+            <span class="param-label">瑞利长度 zR</span>
+            <span class="param-value" id="displayZR">--</span>
+          </div>
+          <div class="param-item highlight">
+            <span class="param-label">发散角 θ</span>
+            <span class="param-value" id="displayTheta">--</span>
+          </div>
+          <div class="param-item highlight">
+            <span class="param-label">光束半径 w(z)</span>
+            <span class="param-value" id="displayWZ">--</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="instruction-panel" id="instructionPanel">
+        <div class="step-number">步骤 <span id="currentStep">0</span></div>
+        <div class="instruction-text" id="instructionText">
+          请从左侧选择一个教学实验开始
+        </div>
+      </div>
+
+      <div class="control-buttons">
+        <button class="ctrl-btn play" id="playBtn" onclick="playExperiment()" disabled>
+          <span class="icon">▶</span> 播放
+        </button>
+        <button class="ctrl-btn pause" id="pauseBtn" onclick="pauseExperiment()" disabled>
+          <span class="icon">⏸</span> 暂停
+        </button>
+        <button class="ctrl-btn reset" id="resetBtn" onclick="resetExperiment()" disabled>
+          <span class="icon">↺</span> 重置
+        </button>
+        <button class="ctrl-btn next" id="nextBtn" onclick="nextStep()" disabled>
+          <span class="icon">→</span> 下一步
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="formula-floating" id="formulaPanel">
+    <div class="panel-header">
+      <span>📐 物理公式</span>
+      <button class="close-btn" onclick="toggleFormulaPanel()">×</button>
+    </div>
+    <div class="formula-content">
+      <div class="formula-item">
+        <div class="formula-name">瑞利长度</div>
+        <div class="formula-expr">$$z_R = \frac{\pi w_0^2}{\lambda}$$</div>
+      </div>
+      <div class="formula-item">
+        <div class="formula-name">发散角</div>
+        <div class="formula-expr">$$\theta = \frac{\lambda}{\pi w_0}$$</div>
+      </div>
+      <div class="formula-item">
+        <div class="formula-name">光束半径</div>
+        <div class="formula-expr">$$w(z) = w_0\sqrt{1 + \left(\frac{z}{z_R}\right)^2}$$</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="formula-toggle" id="formulaToggle" onclick="toggleFormulaPanel()">📐</button>
+
+  <script src="experiment.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>

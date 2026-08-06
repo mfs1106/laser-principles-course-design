@@ -1,0 +1,314 @@
+/* 设置全局盒模型，避免内边距影响三栏宽度计算 */
+* {
+  box-sizing: border-box;
+}
+
+/* 设置页面基础白色背景和中文字体 */
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: #2c3e50;
+  background: #f5f6f8;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+}
+
+/* 页面顶部用于承载项目名称和课程信息 */
+.page-header {
+  padding: 24px 32px 18px;
+  border-bottom: 1px solid #e0e4e8;
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 导航按钮样式 */
+.nav-btn {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #42d7c8, #2db8ab);
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(66, 215, 200, 0.3);
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+/* 课程名称作为辅助信息显示 */
+.course-name {
+  margin: 0 0 8px;
+  color: #3a9e96;
+  font-size: 14px;
+}
+
+/* 页面主标题保持清晰稳定 */
+h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: #2c3e50;
+}
+
+/* 页面容器 */
+.page-container {
+  width: 100%;
+}
+
+/* 光斑显示部分在最上面，占满宽度 */
+.spot-display-section {
+  width: min(1280px, 94vw);
+  margin: 22px auto;
+}
+
+/* 主体采用左中右三栏布局，中间区域占据主要宽度 */
+.page-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(360px, 1fr) 280px;
+  gap: 18px;
+  width: min(1280px, 94vw);
+  margin: 22px auto;
+}
+
+/* 三个功能区使用统一面板样式 */
+.panel {
+  min-height: 520px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #dde1e6;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* 二级标题 */
+h2 {
+  margin: 0 0 18px;
+  color: #2c3e50;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* 参数表单采用纵向排列 */
+.parameter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* 单个输入组 */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 输入项标签 */
+.input-group label {
+  color: #555;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* 输入框和单位横向排列 */
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 52px;
+  overflow: hidden;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+/* 数值输入框 */
+.input-row input {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  color: #2c3e50;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-size: 15px;
+}
+
+/* 输入框占位文本 */
+.input-row input::placeholder {
+  color: #999;
+}
+
+/* 单位区域 */
+.unit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3a9e96;
+  background: #eef7f6;
+  border-left: 1px solid #d0d5dd;
+  font-size: 14px;
+}
+
+/* 主按钮 */
+.primary-button {
+  width: 100%;
+  height: 44px;
+  margin-top: 4px;
+  color: #fff;
+  background: #42d7c8;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.primary-button:hover {
+  background: #3ab8aa;
+}
+
+/* 中间显示区 */
+.display-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 光束显示框 */
+.beam-display {
+  position: relative;
+  flex: 1;
+  min-height: 420px;
+  overflow: hidden;
+  background: #fafbfc;
+  border: 1px solid #dde1e6;
+  border-radius: 8px;
+}
+
+/* ECharts 图表容器 */
+.beam-chart {
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+/* Canvas 动画层 */
+.beam-animation-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 中心水平线 */
+.beam-axis {
+  position: absolute;
+  top: 50%;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: #c0c7cf;
+  z-index: 1;
+}
+
+/* 静态光束引导线 */
+.beam-guide {
+  position: absolute;
+  top: calc(50% - 2px);
+  left: 12%;
+  right: 12%;
+  height: 4px;
+  background: #42d7c8;
+  border-radius: 8px;
+  box-shadow: 0 0 18px rgba(66, 215, 200, 0.35);
+  z-index: 1;
+}
+
+/* 显示区标记文字 */
+.display-marker {
+  position: absolute;
+  bottom: 22px;
+  color: #888;
+  font-size: 13px;
+  z-index: 3;
+}
+
+.marker-left {
+  left: 10%;
+}
+
+.marker-right {
+  right: 10%;
+}
+
+/* 计算结果列表 */
+.result-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* 单个结果项 */
+.result-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 58px;
+  padding: 14px;
+  background: #f8f9fa;
+  border: 1px solid #dde1e6;
+  border-radius: 8px;
+}
+
+.result-item span {
+  color: #555;
+  font-size: 14px;
+}
+
+.result-item strong {
+  color: #2c3e50;
+  font-size: 18px;
+}
+
+/* 中等屏幕 */
+@media (max-width: 1100px) {
+  .page-layout {
+    grid-template-columns: 240px minmax(320px, 1fr) 240px;
+  }
+
+  .spot-display-section {
+    width: min(1000px, 90vw);
+  }
+}
+
+/* 小屏幕 */
+@media (max-width: 860px) {
+  .page-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .spot-display-section {
+    width: min(100%, 90vw);
+  }
+
+  .panel {
+    min-height: auto;
+  }
+
+  .beam-display {
+    min-height: 320px;
+  }
+}

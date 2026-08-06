@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实验数据中心 - 激光原理课程设计</title>
+  <link rel="stylesheet" href="dataCenter.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+  <header class="page-header">
+    <h1>📊 实验数据中心</h1>
+    <div class="header-buttons">
+      <button class="export-btn" onclick="exportAllCSV()">📥 导出全部数据</button>
+      <button class="clear-btn" onclick="clearAllData()">🗑 清空记录</button>
+      <button class="back-btn" onclick="goBack()">← 返回首页</button>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <div class="stats-overview">
+      <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <div class="stat-info">
+          <div class="stat-value" id="totalExperiments">0</div>
+          <div class="stat-label">实验总数</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔬</div>
+        <div class="stat-info">
+          <div class="stat-value" id="totalRecords">0</div>
+          <div class="stat-label">记录条数</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⏱</div>
+        <div class="stat-info">
+          <div class="stat-value" id="lastSession">--</div>
+          <div class="stat-label">最近记录</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📈</div>
+        <div class="stat-info">
+          <div class="stat-value" id="avgWaist">--</div>
+          <div class="stat-label">平均束腰(mm)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <div class="left-panel">
+        <div class="panel-section">
+          <h2>📋 实验记录列表</h2>
+          <div class="records-list" id="recordsList">
+            <div class="empty-state" id="emptyState">
+              <p>暂无实验记录</p>
+              <p>请先完成教学实验</p>
+            </div>
+          </div>
+          <div class="records-actions">
+            <button class="action-btn" onclick="loadSampleData()">📝 加载示例数据</button>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2>📐 数据表格</h2>
+          <div class="table-container" id="tableContainer">
+            <table class="data-table" id="dataTable">
+              <thead>
+                <tr>
+                  <th>时间</th>
+                  <th>实验</th>
+                  <th>λ(nm)</th>
+                  <th>w₀(mm)</th>
+                  <th>zR(m)</th>
+                  <th>θ(mrad)</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-panel">
+        <div class="panel-section chart-section">
+          <h2>📈 历史曲线</h2>
+          <div class="chart-controls">
+            <select id="curveType" onchange="updateHistoryChart()">
+              <option value="zR_w0">瑞利长度 vs 束腰</option>
+              <option value="theta_lambda">发散角 vs 波长</option>
+              <option value="zR_lambda">瑞利长度 vs 波长</option>
+              <option value="theta_w0">发散角 vs 束腰</option>
+            </select>
+          </div>
+          <div id="historyChart" class="chart"></div>
+        </div>
+
+        <div class="panel-section chart-section">
+          <h2>📊 统计分析</h2>
+          <div class="stats-chart-container">
+            <div id="statsChart1" class="stats-chart"></div>
+            <div id="statsChart2" class="stats-chart"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="recordModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>记录详情</h3>
+        <button class="close-modal" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn delete" onclick="deleteRecord()">🗑 删除</button>
+        <button class="modal-btn close" onclick="closeModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="dataCenter.js"></script>
+</body>
+</html>

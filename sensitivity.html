@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>参数敏感性分析 - 激光原理课程设计</title>
+  <link rel="stylesheet" href="sensitivity.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="page-header">
+    <h1>📊 参数敏感性分析</h1>
+    <button class="back-btn" onclick="goBack()">← 返回首页</button>
+  </header>
+
+  <div class="analysis-container">
+    <div class="control-panel">
+      <h2>分析类型选择</h2>
+      
+      <div class="analysis-type">
+        <label>
+          <input type="radio" name="analysisType" value="single" checked>
+          <span>单变量分析</span>
+        </label>
+        <label>
+          <input type="radio" name="analysisType" value="dual">
+          <span>双变量分析</span>
+        </label>
+      </div>
+
+      <h3>选择分析曲线</h3>
+      <div class="curve-options">
+        <label>
+          <input type="checkbox" name="curve" value="w0-zR" checked>
+          <span>束腰半径 w₀ - 瑞利长度 zR</span>
+        </label>
+        <label>
+          <input type="checkbox" name="curve" value="lambda-zR" checked>
+          <span>波长 λ - 瑞利长度 zR</span>
+        </label>
+        <label>
+          <input type="checkbox" name="curve" value="w0-theta" checked>
+          <span>束腰半径 w₀ - 发散角 θ</span>
+        </label>
+      </div>
+
+      <h3>参数范围设置</h3>
+      <div class="param-range">
+        <div class="range-item">
+          <label>波长 λ 范围</label>
+          <div class="range-input">
+            <input type="number" id="lambdaMin" value="400" min="100" max="2000">
+            <span>~</span>
+            <input type="number" id="lambdaMax" value="1000" min="100" max="2000">
+            <span class="unit">nm</span>
+          </div>
+        </div>
+        <div class="range-item">
+          <label>束腰 w₀ 范围</label>
+          <div class="range-input">
+            <input type="number" id="waistMin" value="0.1" step="0.1" min="0.01" max="5">
+            <span>~</span>
+            <input type="number" id="waistMax" value="2.0" step="0.1" min="0.01" max="5">
+            <span class="unit">mm</span>
+          </div>
+        </div>
+        <div class="range-item">
+          <label>采样点数</label>
+          <input type="number" id="sampleCount" value="50" min="10" max="200">
+        </div>
+      </div>
+
+      <div class="fixed-param">
+        <h3>固定参数（单变量分析时使用）</h3>
+        <div class="fixed-item">
+          <label>固定波长 λ</label>
+          <div class="input-row">
+            <input type="number" id="fixedLambda" value="632.8" min="100" max="2000">
+            <span class="unit">nm</span>
+          </div>
+        </div>
+        <div class="fixed-item">
+          <label>固定束腰 w₀</label>
+          <div class="input-row">
+            <input type="number" id="fixedWaist" value="0.5" step="0.1" min="0.01" max="5">
+            <span class="unit">mm</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="analyze-btn" onclick="generateCharts()">开始分析</button>
+      <button class="export-btn" onclick="exportImages()">导出图片</button>
+    </div>
+
+    <div class="charts-panel">
+      <div class="chart-container">
+        <div class="chart-header">
+          <h3>w₀ - zR 关系曲线</h3>
+          <button class="chart-export" onclick="exportChart('w0zRChart')">📷</button>
+        </div>
+        <div id="w0zRChart" class="chart"></div>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart-header">
+          <h3>λ - zR 关系曲线</h3>
+          <button class="chart-export" onclick="exportChart('lambdaZChart')">📷</button>
+        </div>
+        <div id="lambdaZChart" class="chart"></div>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart-header">
+          <h3>w₀ - θ 关系曲线</h3>
+          <button class="chart-export" onclick="exportChart('w0ThetaChart')">📷</button>
+        </div>
+        <div id="w0ThetaChart" class="chart"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-panel" id="infoPanel">
+    <div class="panel-header">
+      <h3>📐 物理公式</h3>
+      <span class="drag-handle">⋮⋮</span>
+    </div>
+    <div class="formula-list">
+      <div class="formula">$$z_R = \frac{\pi w_0^2}{\lambda}$$</div>
+      <div class="formula">$$\theta = \frac{\lambda}{\pi w_0}$$</div>
+      <div class="formula">$$w(z) = w_0\sqrt{1 + \left(\frac{z}{z_R}\right)^2}$$</div>
+    </div>
+    <h3>💡 分析说明</h3>
+    <p>单变量分析：保持一个参数固定，分析另一个参数变化对结果的影响</p>
+    <p>双变量分析：同时展示不同参数组合下的结果，便于对比分析</p>
+  </div>
+
+  <script src="sensitivity.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false}
+        ]
+      });
+    });
+  </script>
+</body>
+</html>

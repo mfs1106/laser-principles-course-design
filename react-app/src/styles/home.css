@@ -1,0 +1,83 @@
+/* ========== 首页布局 ========== */
+.home-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.home-spot-section {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.spot-canvas-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.spot-info {
+  display: flex;
+  gap: 20px;
+}
+
+.spot-param-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.spot-param-label {
+  color: #555;
+}
+
+.spot-param-value {
+  color: #3a9e96;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+
+.home-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(360px, 1fr) 260px;
+  gap: 18px;
+}
+
+.home-control-panel {
+  min-height: 520px;
+}
+
+.home-chart-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 520px;
+}
+
+.home-results-panel {
+  min-height: 520px;
+}
+
+.result-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (max-width: 1100px) {
+  .home-layout {
+    grid-template-columns: 240px minmax(320px, 1fr) 240px;
+  }
+}
+
+@media (max-width: 860px) {
+  .home-layout {
+    grid-template-columns: 1fr;
+  }
+  .home-control-panel,
+  .home-results-panel {
+    min-height: auto;
+  }
+}
