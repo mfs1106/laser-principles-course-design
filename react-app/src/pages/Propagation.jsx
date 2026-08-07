@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Formula from '../components/Formula';
 import { calculateGaussianBeam, mmToM, nmToM, fmt } from '../utils/gaussian';
 import '../styles/propagation.css';
 
@@ -15,6 +16,7 @@ function Propagation() {
   const intensityCanvasRef = useRef(null);
   const animIdRef = useRef(null);
   const lastTimeRef = useRef(0);
+  const drawAllRef = useRef(null);
 
   const result = calculateGaussianBeam(wavelength, waist, currentZ);
 
@@ -26,13 +28,6 @@ function Propagation() {
     canvas.width = container.clientWidth;
     canvas.height = container.clientHeight;
     return true;
-  }, []);
-
-  // Draw all canvases
-  const drawAll = useCallback(() => {
-    drawPropagation();
-    drawCrossSection();
-    drawIntensity();
   }, []);
 
   // Draw main propagation view
@@ -315,6 +310,17 @@ function Propagation() {
     ctx.fillText('FWHM', (fwhmX1 + fwhmX2) / 2 - 18, halfY - 5);
   }, [result]);
 
+  // Keep every canvas synchronized with the latest React state.
+  const drawAll = useCallback(() => {
+    drawPropagation();
+    drawCrossSection();
+    drawIntensity();
+  }, [drawPropagation, drawCrossSection, drawIntensity]);
+
+  useEffect(() => {
+    drawAllRef.current = drawAll;
+  }, [drawAll]);
+
   // Animation loop
   useEffect(() => {
     if (!isAnimating) {
@@ -344,16 +350,25 @@ function Propagation() {
     if (currentZ >= maxZ) setIsAnimating(false);
   }, [currentZ, maxZ]);
 
-  // Initial draw
+  // Initialize canvas dimensions and keep them in sync with the container.
   useEffect(() => {
-    resizeCanvas();
-    drawAll();
-    window.addEventListener('resize', () => { resizeCanvas(); drawAll(); });
-    return () => window.removeEventListener('resize', () => {});
-  }, []);
+    const container = mainCanvasRef.current?.parentElement;
+    const handleResize = () => {
+      resizeCanvas();
+      drawAllRef.current?.();
+    };
+    handleResize();
+    const observer = new ResizeObserver(handleResize);
+    if (container) observer.observe(container);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [resizeCanvas]);
 
   // Redraw on param change
-  useEffect(() => { drawAll(); }, [wavelength, waist, currentZ, drawAll]);
+  useEffect(() => { drawAll(); }, [drawAll]);
 
   const reset = () => {
     setIsAnimating(false);
@@ -391,9 +406,9 @@ function Propagation() {
         </div>
         <div className="formula-section">
           <h3>📐 物理公式</h3>
-          <div className="formula-item">{`z_R = \\frac{\\pi w_0^2}{\\lambda}`}</div>
-          <div className="formula-item">{`\\theta = \\frac{\\lambda}{\\pi w_0}`}</div>
-          <div className="formula-item">{`w(z) = w_0\\sqrt{1 + \\left(\\frac{z}{z_R}\\right)^2}`}</div>
+          <div className="formula-item"><Formula>{'z_R = \\frac{\\pi w_0^2}{\\lambda}'}</Formula></div>
+          <div className="formula-item"><Formula>{'\\theta = \\frac{\\lambda}{\\pi w_0}'}</Formula></div>
+          <div className="formula-item"><Formula>{'w(z) = w_0\\sqrt{1 + \\left(\\frac{z}{z_R}\\right)^2}'}</Formula></div>
         </div>
       </aside>
 
@@ -426,7 +441,7 @@ function Propagation() {
         <div className="legend-section">
           <h3>图例说明</h3>
           <div className="legend-item"><span className="legend-color blue" /><span>瑞利区 (z ≤ zR)</span></div>
-          <div className="legend-item"><span className="legend-color red" /><span>发散区 (z > zR)</span></div>
+          <div className="legend-item"><span className="legend-color red" /><span>发散区 (z {'>'} zR)</span></div>
           <div className="legend-item"><span className="legend-color gold" /><span>z = 0 (束腰位置)</span></div>
           <div className="legend-item"><span className="legend-color orange" /><span>z = zR (瑞利长度)</span></div>
         </div>

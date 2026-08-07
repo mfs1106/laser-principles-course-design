@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import * as echarts from 'echarts';
+import Formula from '../components/Formula';
 import { calculateGaussianBeam, generateBeamCurveData, fmt } from '../utils/gaussian';
 import '../styles/home.css';
 
@@ -167,9 +168,9 @@ function Home() {
 
           <div className="formula-section">
             <h3>📐 物理公式</h3>
-            <div className="formula-item">{`z_R = \\frac{\\pi w_0^2}{\\lambda}`}</div>
-            <div className="formula-item">{`\\theta = \\frac{\\lambda}{\\pi w_0}`}</div>
-            <div className="formula-item">{`w(z) = w_0\\sqrt{1 + \\left(\\frac{z}{z_R}\\right)^2}`}</div>
+            <div className="formula-item"><Formula>{'z_R = \\frac{\\pi w_0^2}{\\lambda}'}</Formula></div>
+            <div className="formula-item"><Formula>{'\\theta = \\frac{\\lambda}{\\pi w_0}'}</Formula></div>
+            <div className="formula-item"><Formula>{'w(z) = w_0\\sqrt{1 + \\left(\\frac{z}{z_R}\\right)^2}'}</Formula></div>
           </div>
         </aside>
       </div>
@@ -197,6 +198,7 @@ function SpotCanvas({ params, results }) {
       const pixelScale = (size / 2 - 10) / (cR * 4);
 
       const imageData = ctx.createImageData(size, size);
+      const data = imageData.data;
       const cx = size / 2, cy = size / 2;
 
       for (let y = 0; y < size; y++) {
