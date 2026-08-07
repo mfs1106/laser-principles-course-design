@@ -4,6 +4,12 @@ const path = require('path');
 let mainWindow;
 
 function createWindow() {
+  // Packaged releases must always load local files and never open DevTools.
+  // `NODE_ENV` can be inherited from a shell, so it is not reliable by itself.
+  const isDevelopment = !app.isPackaged && (
+    process.env.NODE_ENV === 'development' || process.argv.includes('--dev')
+  );
+
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 900,
@@ -17,7 +23,7 @@ function createWindow() {
   });
 
   // In development, load from Vite dev server
-  if (process.env.NODE_ENV === 'development' || process.argv.includes('--dev')) {
+  if (isDevelopment) {
     mainWindow.loadURL('http://localhost:5173');
     mainWindow.webContents.openDevTools();
   } else {

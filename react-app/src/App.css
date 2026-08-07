@@ -23,6 +23,15 @@ body {
   padding-top: 60px;
 }
 
+.route-loading {
+  display: grid;
+  min-height: 55vh;
+  place-items: center;
+  color: #3a9e96;
+  font-size: 14px;
+  font-weight: 700;
+}
+
 /* ========== 导航栏 ========== */
 .navbar {
   position: fixed;
